@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="equation" class="org.equation.Equation" factory-method="createEquation" />
+
+    <bean id="com.x3mum.graph.core.MethodManager" class="com.x3mum.graph.core.MethodManager">
+        <property name="currentMethod" value="0"/>
+        <property name="methodsList">
+            <list>
+                <bean class="com.x3mum.graph.core.Dichotomy">
+                    <property name="equation" ref="equation"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>

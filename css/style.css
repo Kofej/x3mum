@@ -1,0 +1,10 @@
+#table_properties {
+  position: relative;
+  float: left;
+  width: 200px;
+}
+#table_function {
+  position: relative;
+  float: right;
+  width: 240px;
+}
