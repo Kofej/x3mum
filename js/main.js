@@ -9,8 +9,9 @@ function plot_graph()
   var input_massive = input_massive_string.substring(1, input_massive_string.length -1).split(",");
   var input_min_line = input_min_line_string.substring(1, input_min_line_string.length -1).split(",");
   var dx = 0.1;
-  //down = Math.min.apply(Math, input_massive);
-  //up = Math.max.apply(Math, input_massive);
+//  down = Math.min.apply(Math, in
+//  put_massive);
+//  up = Math.max.apply(Math, input_massive);
   var points = [];
   var x_axis = [];
   var y_axis = [];
@@ -64,8 +65,30 @@ function plot_graph()
 }
 
 //////////////////////////////////////////************************************************************
-$().ready(function()
+$(document).ready(function()
 {
+  $("#test").click(function()
+  {
+    $.ajax({
+      type: "POST",
+      url: "graph/test",
+      data :
+      {
+        "function" : $("#function").val(),
+        "left": resultValueLeft,
+        "right": resultValueRight
+      },
+      success: function(data)
+      {
+        setResultValue(true);
+      },
+      error: function()
+      {
+        $("#function").css("color", "red")
+      }
+    })
+  })
+
   $("#findMin").click(function()
   {
     $.ajax({
@@ -74,8 +97,8 @@ $().ready(function()
       data :
       {
         "function" : $("#function").val(),
-        "left": $("#left_renge").val(),
-        "right": $("#right_renge").val()
+        "left": $("#left").val(),
+        "right": $("#right").val()
       },
       success: function(data)
       {
@@ -97,8 +120,8 @@ $().ready(function()
       data :
       {
         "function" : $("#function").val(),
-        "left": $("#left_renge").val(),
-        "right": $("#right_renge").val()
+        "left": resultValueLeft,
+        "right": resultValueRight
       },
       success: function(data)
       {

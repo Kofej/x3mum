@@ -50,18 +50,33 @@
     <td>function</td>
     <td><input id="function" type="text" value="" /></td>
   </tr>
-  <tr>
-    <td>left renge</td>
-    <td><input id="left_renge" type="text" value="-2" /></td>
-  </tr>
-  <tr>
-    <td>right renge</td>
-    <td><input id="right_renge" type="text" value="2" /></td>
-  </tr>
 </table>
 
-<input id="findMin" type="button" value="Find min"/>
-<input id="step" type="button" value="step"/>
+<input id="findMin" type="button" value="Find min" />
+<input id="step" type="button" value="step" />
+<input id="test" type="button" value="test" />
+<input id="test1" type="button" value="test1" onclick=setResultValue(true) />
+
+<script type="text/javascript">
+  function setResultValue(tmp)
+  {
+    if(tmp)
+    {
+      resultValueLeft = "${resultValue.left}";
+      resultValueRight = "${resultValue.right}";
+      alert(resultValueLeft);
+    }
+    else
+    {
+      resultValueLeft = $("#left").val();
+      resultValueRight = $("#right").val();
+    }
+  }
+
+  $(document).ready(function(){
+    setResultValue(false);
+  });
+</script>
 
 </body>
 

@@ -22,7 +22,6 @@
     <bean id="com.x3mum.graph.controllers.GraphController"
           class="com.x3mum.graph.controllers.GraphController">
         <property name="methodManager" ref="com.x3mum.graph.core.MethodManager"/>
-        <property name="equation" ref="equation" />
     </bean>
 
 </beans>
