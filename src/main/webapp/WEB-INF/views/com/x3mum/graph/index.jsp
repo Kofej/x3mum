@@ -20,23 +20,23 @@
         <tr>
           <th colspan="3">Graphic properties</th>
         </tr>
-        <tr class="green">
-          <td>up</td>
-          <td><input id="up" type="text" value="12" /></td>
+        <tr>
+          <td>upper limit</td>
+          <td><input id="up" type="text" value="6" /></td>
         </tr>
-        <tr class="green">
-          <td>down</td>
-          <td><input id="down" type="text" value="-12" /></td>
+        <tr>
+          <td>lower limit</td>
+          <td><input id="down" type="text" value="-2" /></td>
         </tr>
-        <tr class="green">
-          <td>left</td>
-          <td><input id="left" type="text" value="-12" /></td>
+        <tr>
+          <td>left bound</td>
+          <td><input id="left" type="text" value="-2" /></td>
         </tr>
-        <tr class="green">
-          <td>right</td>
-          <td><input id="right" type="text" value="12" /></td>
+        <tr>
+          <td>right bound</td>
+          <td><input id="right" type="text" value="5" /></td>
         </tr>
-        <tr class="yellow">
+        <tr class="aque">
           <td>function</td>
           <td><input id="function" type="text" value="" /></td>
         </tr>
