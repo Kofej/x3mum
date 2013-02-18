@@ -4,6 +4,7 @@
 <head>
   <title>x3mum</title>
   <script type="text/javascript" src="<c:url value="/js/jquery/jquery.js" />"></script>
+  <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css" />" />
 </head>
 <body>
 
