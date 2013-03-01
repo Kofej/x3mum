@@ -66,4 +66,14 @@ public abstract class Method {
   {
     return this.numberOfIteration;
   }
+
+  public double getLeft()
+  {
+    return this.left;
+  }
+
+  public double getRight()
+  {
+    return this.right;
+  }
 }

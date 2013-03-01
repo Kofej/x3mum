@@ -7,7 +7,7 @@ public class MethodManager {
 
   public Method getMethod(int id)
   {
-    return methods.get(id);
+    return ((Method) methods.get(id)); // TODO: must return new value
   }
 
   public List<Method> getMethodsList()

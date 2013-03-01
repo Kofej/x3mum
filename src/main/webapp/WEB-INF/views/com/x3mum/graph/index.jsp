@@ -36,7 +36,11 @@
           <td>right bound</td>
           <td><input id="right" type="text" value="5" /></td>
         </tr>
-        <tr class="aque">
+        <tr>
+          <td>accuracy</td>
+          <td><input id="accuracy" type="text" value="0.001" /></td>
+        </tr>
+        <tr class="aqua">
           <td>function</td>
           <td><input id="function" type="text" value="" /></td>
         </tr>
@@ -47,29 +51,13 @@
 
     <input id="findMin" type="button" value="Find min" />
     <input id="step" type="button" value="step" />
-    <input id="test" type="button" value="test" />
-    <input id="test1" type="button" value="test1" onclick=setResultValue(true) />
 
     <script type="text/javascript">
-      function setResultValue(tmp)
-      {
-        if(tmp)
-        {
-          resultValueLeft = "${resultValue.left}";
-          resultValueRight = "${resultValue.right}";
-          alert(resultValueLeft);
-        }
-        else
-        {
-          resultValueLeft = $("#left").val();
-          resultValueRight = $("#right").val();
-        }
-      }
-
-      $(document).ready(function(){
-        setResultValue(false);
+      $(document).ready(function() {
+        currentLeft = $("#left").val();
+        currentRight = $("#right").val();
       });
     </script>
-  </body>
 
+  </body>
 </html>

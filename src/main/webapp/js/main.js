@@ -1,39 +1,27 @@
-input_massive_string = "";
-input_min_line_string = "";
+previousGraphicPoints = null;
 /////////////////////////////////////////////////*******************************************************
 $.jqplot.config.enablePlugins = true;
-function plot_graph()
+function plot_graph(graphicPoints, minimumLinePoints)
 {
-  $("#chartdiv").empty();
   plot = null;
-  var input_massive = input_massive_string.substring(1, input_massive_string.length -1).split(",");
-  var input_min_line = input_min_line_string.substring(1, input_min_line_string.length -1).split(",");
-  var dx = 0.1;
-//  down = Math.min.apply(Math, in
-//  put_massive);
-//  up = Math.max.apply(Math, input_massive);
+  var dx = 0.1; //TODO: must be some constant for graphic accuracy. It's difficult from method accuracy
   var points = [];
   var x_axis = [];
   var y_axis = [];
-  var min_line = [];
-  min_line.push([input_min_line[0], 0]);
-  min_line.push([input_min_line[0], input_min_line[1]]);
-  var x_ = parseFloat($("#left").val());
-  for(var i = 0; i < input_massive.length; i ++)
-  {
-    points.push([x_, input_massive[i]]);
-    x_axis.push([x_, 0]);
-    x_ += dx;
-  }
-  for(var y_ = parseFloat($("#down").val()); y_ < parseFloat($("#up").val()); y_ += 0.1)
-  {
-    y_axis.push([0, y_]);
-  }
   var left = parseFloat($("#left").val());
   var right = parseFloat($("#right").val());
   var down = parseFloat($("#down").val());
   var up = parseFloat($("#up").val());
-  optionObj =
+
+  // Calculate 'x' axis
+  x_axis.push([left, 0]);
+  x_axis.push([right, 0]);
+
+  // Calculate 'y' axis
+  y_axis.push([0, down]);
+  y_axis.push([0, up]);
+
+  var optionObj =
   {
     seriesColors : ["f03030", "3030f0", "3030f0","30f030"],
     title: 'Graphic',
@@ -60,189 +48,171 @@ function plot_graph()
     {
       zoom: true
     }
+  };
+
+  plot = $.jqplot('chartdiv', [x_axis, y_axis], optionObj)
+  if(undefined != graphicPoints)
+  {
+    $("#chartdiv").empty();
+    // Calculate graphic points
+    var x_ = left;
+    for(var i = 0; i < graphicPoints.length; i ++)
+    {
+      points.push([x_, graphicPoints[i]]);
+      x_ += dx;
+    }
+    plot = $.jqplot('chartdiv', [points, x_axis, y_axis], optionObj)
+    previousGraphicPoints = points;
   }
-  plot = $.jqplot('chartdiv', [points, x_axis, y_axis, min_line], optionObj);
-}
+  else if(undefined != minimumLinePoints && null !=  previousGraphicPoints)
+  {
+    $("#chartdiv").empty();
+    var min_line = [];
+    min_line.push([minimumLinePoints[0], 0]);
+    min_line.push([minimumLinePoints[0], minimumLinePoints[1]]);
+    plot = $.jqplot('chartdiv', [previousGraphicPoints, x_axis, y_axis, min_line], optionObj)
+  }
+};
 
 //////////////////////////////////////////************************************************************
 $(document).ready(function()
 {
-  $("#test").click(function()
+  $("#function").blur(function()
   {
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
-      url: "graph/test",
-      data :
+      url: "graph/grbuild",
+      data:
       {
-        "function" : $("#function").val(),
-        "left": resultValueLeft,
-        "right": resultValueRight
-      },
-      success: function(data)
-      {
-        setResultValue(true);
-      },
-      error: function()
-      {
-        $("#function").css("color", "red")
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val()
       }
-    })
-  })
+    });
+    request.done(function(data) {
+      $("#function").css("color", "black")
+      plot_graph(data, null)
+      currentLeft = $("#left").val();
+      currentRight = $("#right").val();
+    });
+    request.fail(function() {
+      $("#function").css("color", "red")
+    });
+  });
 
   $("#findMin").click(function()
   {
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/findmin",
       data :
       {
-        "function" : $("#function").val(),
-        "left": $("#left").val(),
-        "right": $("#right").val()
-      },
-      success: function(data)
-      {
-        input_min_line_string = data.toString()
-        plot_graph()
-      },
-      error: function()
-      {
-        $("#function").css("color", "red")
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val(),
+        accuracy: $("#accuracy").val()
       }
-    })
-  })
+    });
+    request.done(function(data) {
+      plot_graph(null, data.solution);
+      currentLeft = $("#left").val();
+      currentRight = $("#right").val();
+    });
+    request.fail(function() {
+      $("#function").css("color", "red")
+    });
+  });
 
   $("#step").click(function()
   {
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/step",
       data :
       {
-        "function" : $("#function").val(),
-        "left": resultValueLeft,
-        "right": resultValueRight
-      },
-      success: function(data)
-      {
-        input_min_line_string = data.toString()
-        plot_graph()
-      },
-      error: function()
-      {
-        $("#function").css("color", "red")
+        function : $("#function").val(),
+        left: currentLeft,
+        right: currentRight,
+        accuracy: $("#accuracy").val()
       }
-    })
-  })
-
-  $("#function").blur(function()
-  {
-    postData =
-    {
-      "function" : $("#function").val(),
-      "left": $("#left").val(),
-      "right": $("#right").val()
-    };
-    $.ajax({
-      type: "POST",
-      url: "graph/grbuild",
-      data: postData,
-      success : function(data)
-      {
-        $("#function").css("color", "black")
-        input_massive_string = data.toString();
-        input_min_line_string = "";
-        plot_graph()
-      },
-      error: function()
-      {
-        $("#function").css("color", "red")
-      }
-    })
-  })
+    });
+    request.done(function(data) {
+      plot_graph(null, data.solution);
+      currentLeft = data.left;
+      currentRight = data.right;
+    });
+    request.fail(function() {
+      $("#function").css("color", "red")
+    });
+  });
 
   $("#left").blur(function()
   {
-    postData =
-    {
-      "function" : $("#function").val(),
-      "left": $("#left").val(),
-      "right": $("#right").val()
-    };
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/grbuild",
-      data: postData,
-      success : function(data)
+      data:
       {
-        input_massive_string = data.toString();
-        input_min_line_string = "";
-        plot_graph()
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val()
       }
-    })
-  })
+    });
+    request.done(function(data) {
+      plot_graph(data, null);
+    });
+  });
 
   $("#right").blur(function()
   {
-    postData =
-    {
-      "function" : $("#function").val(),
-      "left": $("#left").val(),
-      "right": $("#right").val()
-    };
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/grbuild",
-      data: postData,
-      success : function(data)
+      data:
       {
-        input_massive_string = data.toString();
-        input_min_line_string = "";
-        plot_graph()
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val()
       }
-    })
-  })
+    });
+    request.done(function(data) {
+      plot_graph(data, null);
+    });
+  });
 
   $("#down").blur(function()
   {
-    postData =
-    {
-      "function" : $("#function").val(),
-      "left": $("#left").val(),
-      "right": $("#right").val()
-    };
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/grbuild",
-      data: postData,
-      success : function(data)
+      data:
       {
-        input_massive_string = data.toString();
-        input_min_line_string = "";
-        plot_graph()
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val()
       }
-    })
-  })
+    });
+    request.done(function(data) {
+      plot_graph(data, null);
+    });
+  });
 
   $("#up").blur(function()
   {
-    postData =
-    {
-      "function" : $("#function").val(),
-      "left": $("#left").val(),
-      "right": $("#right").val()
-    };
-    $.ajax({
+    var request = $.ajax({
       type: "POST",
       url: "graph/grbuild",
-      data: postData,
-      success : function(data)
+      data:
       {
-        input_massive_string = data.toString();
-        input_min_line_string = "";
-        plot_graph()
+        function : $("#function").val(),
+        left: $("#left").val(),
+        right: $("#right").val()
       }
-    })
-  })
-})
+    });
+    request.done(function(data) {
+      plot_graph(data, null);
+    });
+  });
+
+});
 /////////////////////////////////////////////***********************************************************

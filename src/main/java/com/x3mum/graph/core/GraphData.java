@@ -1,9 +1,13 @@
 package com.x3mum.graph.core;
 
-public class ResultValue {
+import java.awt.geom.Point2D;
+
+public class GraphData {
   private double left;
   private double right;
   private double accuracy;
+  private String function;
+  private double[] solution;
 
   public double getLeft()
   {
@@ -33,5 +37,25 @@ public class ResultValue {
   public void setAccuracy(double accuracy)
   {
     this.accuracy = accuracy;
+  }
+
+  public String getFunction()
+  {
+    return function;
+  }
+
+  public void setFunction(String function)
+  {
+    this.function = function;
+  }
+
+  public double[] getSolution()
+  {
+    return solution;
+  }
+
+  public void setSolution(double[] solution)
+  {
+    this.solution = solution;
   }
 }
